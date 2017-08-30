@@ -54,20 +54,11 @@ make && make install
 
 ERM assumes the following directory layout:
 
-ERM
- ├── src                   # Cource code of the numerical kernels (.cpp, .c. .h, etc.)
- ├── bin                   # LLVM bitcode files
- ├── output                # ERM output and extended roofline plots
- ├── run-erm.py            # Python script to run ERM.
-
-    .
-    ├── build                   # Compiled files (alternatively `dist`)
-    ├── docs                    # Documentation files (alternatively `doc`)
-    ├── src                     # Source files (alternatively `lib` or `app`)
-    ├── test                    # Automated tests (alternatively `spec` or `tests`)
-    ├── tools                   # Tools and utilities
-    ├── LICENSE
-    └── README.md
+    ERM
+    ├── src                   # Source code of the numerical kernels (.cpp, .c. .h, etc.)
+    ├── bin                   # LLVM bitcode files
+    ├── output                # ERM output and extended roofline plots
+    └── run-erm.py			# Python script to run ERM.
 
 
 1. Prepare and locate your source file (C or C++) into the src directory.  
