@@ -1,8 +1,9 @@
 # ERM: Extended Roofline Model
 
-Our tool to generate extended roofline plots is based on a DAG analysis
-implemented in the LLVM Interpreter. The analysis is implemented in
-the file DynamicAnalysis.cpp, 
+ERM is a tool for analyzing (modeled) bottlenecks of numerical kernels running on modern microarchitectures.
+
+ERM is based on the the DAG-based performance model from [1]. Given a numerical kernel (written in C/C++), ERM generates its dynamic computation DAG (for the given input) and simulates its execution on a high-level model of a microarchicture. From the scheduled DAG, it extracts detailed per-cycle data about the execution, that is used to generate an extended roofline plot, an extension of the original roofline plot [2], with additional . The result is ageneralization of the roofline plot that integrates additional hardware-related bottlenecks as performance bounds into a singleviewgraph.
+
 
 
 
@@ -15,78 +16,64 @@ the file DynamicAnalysis.cpp,
 * [Examples]
 
 
+## Build Instructions
 
-
-## Installation
-
-
-You can clone the code from:
+Clone the repository:
 
 https://github.com/caparrov/ERM.git
 
-It contains the entire LLVM directory, with the additional files in lib/Support
-that implement the analysis, and some modifications in the interpreter
-(lib/Execution/Interpreter/Execution.cpp), and 
+ERM is based on LLVM 4.0.1 (last version available at the time of updating this repository).
+It contains the entire LLVM directory (llvm.4.0.1.src), with the additional files in llvm.4.0.1.src/lib/Support
+that implement the DAG analysis, and some modifications in the interpreter
+(llvm.4.0.1.src/lib/Execution/Interpreter/Execution.cpp). To install ERM, you need to install LLVM. To do so, create
+an empty build directory
+
+```
+mkdir llvm.4.0.1.build
+cd llvm.4.0.1.build
+```
+
+### Requirements
+
+Note that to install LLVM, CMake 3.4.3 and GCC 4.8 are the minimum required.
 
 
-To build it, create an empty directory, e.g. ERM-build, and within this
-directory type:
+Then, execute the following command, replacing /path/to/llvm/install and path/to/binutils/include with the path to the directory where LLVM is to be installed, and the path to the binutils:
 
-C++11!!!
+```
+CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX=/path/to/install -DLLVM_ENABLE_FFI=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_ENABLE_CXX1Y=ON - DLLVM_BINUTILS_INCDIR=path/to/binutils/include -DCMAKE_BUILD_TYPE=RelWithDebInfo -Wno-dev ../llvm-4.0.1.src
+```
 
-path-to-ERM/configure --enable-libffi --enable-optimized --with-binutils-include=/usr/local/binutils/include --enable-cxx11 CC=gcc CXX=g++
+Add DynamicAnalysis.cpp to llvm-4.0.1.src/lib/Support/CMakeLists.txt
 
-VERY IMPORTANT
-: Requires cmake 3.8, gcc 4.8, etc. It takes time, so be patient :)
-CC=/usr/local/bin/gcc GXX=/usr/local/bin/g++ cmake -DCMAKE_INSTALL_PREFIX=/usr -DLLVM_ENABLE_FFI=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_BINUTILS_INCDIR=/usr/local/binutils/include -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_CXX1Y=ON -DLLVM_BUILD_LLVM_DYLIB=ON  -Wno-dev -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/usr/lib64 -L/usr/lib64" ../llvm-4.0.1.src
+Finally, make and install LLVM. It takes time, so be patient :)
 
-CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++ cmake -DCMAKE_INSTALL_PREFIX=/local -DLLVM_ENABLE_FFI=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_ENABLE_CXX1Y=ON -DLLVM_BINUTILS_INCDIR=/usr/local/binutils/include -DCMAKE_BUILD_TYPE=RelWithDebInfo      -Wno-dev ../llvm-4.0.1.src
+```
+make
+make install
+```
 
+#### Running an application
 
+Locate your source file (C or C++) into the srs directory.
 
-Add DynamicAnalysis.cpp to /local/llvm-4.0.1.src/lib/Support/CMakeLists.txt
+* Put the function such that it is no inlined and can be detected
 
-
-If you want the installation of ERM in a specific directory add the
-—prefix=path option to the configure.
-
-
-Then make, and make install.
-
-
-## Install Contech
-
-As explained in XX, . In order to , you need to install Contech from 
-
-https://github.com/bprail/contech
+* If run in a warm cache scenario, make sure the function is called twice:
 
 
-Copy /local/contech/common/taskLib/libTask.a to /local/llvm-3.4-build/Release+Asserts/lib/libTask.a
+*
 
-## What's included
-
-Within the download you'll find the following directories and files, You'll see something like this:
-
-
-Mkae sure that in DyanamicAnalysis.h corresponds to the last intruction in ./include/llvm/IR/Instruction.def
-#define LAST_INST 64
-
-
-## Run with the LLVM interpreter
-
-
-
-## Run with Contech
-
+The output directory containts the outuput of the interpreter, erm.out, and the PDF of the file.
 
 ## Output
 
 
 
 
-## Generate Extended Roofline Plots
+[1] V. Caparrós Cabezas. "A DAG-Based Approach to ModelingBottlenecks on Modern Microarchitectures". Diss. ETH No. 24256 (2017)
 
-
+[2]
 
 
 
