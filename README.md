@@ -21,10 +21,11 @@ ERM is based on the the DAG-based performance model from [1]. Given a numerical 
 
 ### Requirements
 
-ERM requires the installation of LLVM 4.0.1 (last version available at the time of updating this repository).
-To install LLVM, CMake 3.4.3 and GCC 4.8 are the minimum required.
-
-To generate the extended roofline plot, ERM uses the python plotting library Matplolib.
+* LLVM 4.0.1 
+* CMake (version 3.8 or greater)
+* GCC (version 4.3 or greater)
+* Python (version 2.7 or greater)
+* Matplotlib (version X or greater)
 
 ### Install LLVM
 
@@ -56,9 +57,10 @@ ERM assumes the following directory layout:
 
     ERM
     ├── src                   # Source code of the numerical kernels (.cpp, .c. .h, etc.)
-    ├── bin                   # LLVM bitcode files
-    ├── output                # ERM output and extended roofline plots
-    └── run-erm.py			# Python script to run ERM.
+    ├── bin                   # LLVM bitcode files.
+    ├── config                # JSON files that contain the microarchitectural configuration.
+    ├── output                # ERM output and extended roofline plots.
+    └── run-erm.py            # Python script to run ERM.
 
 
 1. Prepare and locate your source file (C or C++) into the src directory.  
@@ -75,13 +77,42 @@ for (unsigned i = 0; i< 2; i++)
 
 * If multiple files, 
 
-2. Configure the analysis with the following configuration variables in the script run-erm.py
+2. Specifiy the microarchitectural parameters.
+
+The parameters that define the model of the microarchitecture can be specified via command line to the interpreter (type 'lli --help' to see all command line options) or via a JSON file located in the configs directory. This option is preferred since the post-analysis to generate the extended roofline plot requires access to the microrachitectural parameters. All configurations files must have the format `configX.json`, where X is an ID for the configuration. For example, `configSB.json` contains the parameters that define a SB microarchiecture.
+
+Command-line argument | Description
+:----------- | :-----
+  -address-generation-units=<uint>  |     Specify the number of address generation units. Default value is infinity
+  -cache-line-size=<uint>           |     Specify the cache line size (B). Default value is 64 B
+  -debug                             |    Generate debug information to allow debugging IR.
+  -execution-units-latency=<number>  |    Specify the execution latency of the nodes(cycles). Default value is 1 cycle
+  -execution-units-parallel-issue=<int> | Specify the number of nodes that can be executed in parallel based on ports execution. Default value is -1 cycle
+  -execution-units-throughput=<number> |  Specify the execution bandwidth of the nodes(ops executed/cycles). Default value is -1 cycle
+  -force-interpreter                   |  Force interpretation: disable JIT
+  -function=<string>                   |  Name of the function to be analyzed
+  -help                                |  Display available options (-help-hidden for more)
+  -instruction-fetch-bandwidth=<int>   |  Specify the size of the reorder buffer. Default value is infinity 
+  -l1-cache-size=<uint>                |  Specify the size of the L1 cache (in bytes). Default value is 32 KB
+  -l2-cache-size=<uint>                |  Specify the size of the L2 cache (in bytes). Default value is 256 KB
+  -line-fill-buffer-size=<uint>        |  Specify the size of the fill line buffer. Default value is infinity
+  -llc-cache-size=<uint>               |  Specify the size of the L3 cache (in bytes). Default value is 20 MB  
+  -load-buffer-size=<uint>             |  Specify the size of the load buffer. Default value is infinity  
+  -mem-access-granularity=<uint>       |  Specify the memory access granularity for the different levels of the memory hierarchy (bytes). Default value is memory word size
+  -memory-word-size=<uint>             |  Specify the size in bytes of a data item. Default value is 8 (double precision) 
+  -reorder-buffer-size=<uint>           | Specify the size of the reorder buffer. Default value is infinity
+  -reservation-station-size=<uint>      | Specify the size of a centralized reservation station. Default value is infinity  
+  -store-buffer-size=<uint>            |  Specify the size of the store buffer. Default value is infinity
+
+
+
+3. Configure the analysis with the following configuration variables in the script run-erm.py
  
 * benchmark: name of the source code file without the extension.
 * function: name of the function to be analyzed. 
 * input: arguments for the execution of the input file, if any.
 * double_precision: 1 if double-precision flaoting point, 0 is single-precision floating point.
-* config: the parameters that define the model of the microarchitecture can be specified via command line to the interpreter (type 'lli --help' to see all command line options) or via a JSON file located in the configs directory. This option is preferred since the post-analysis to generate the extended roofline plot requires access to the microrachitectural parameters. All configurations files must have the format `configX.json`, where X is an ID for the configuration. For example, `configSB.json` contains the parameters that define a SB microarchiecture. The variable config in the run-erm.py script must be initialized with the config ID (X).
+* config: The variable config in the run-erm.py script must be initialized with the config ID (X).
 
 * Initilize LLI_PATH and CLANG_PATH to the location where they are installed (prefix specificied in the LLVM installation).
 
@@ -120,6 +151,8 @@ This script does the following:
 
 
 
+
+## References
 
 [1] V. Caparrós Cabezas. "A DAG-Based Approach to ModelingBottlenecks on Modern Microarchitectures". Diss. ETH No. 24256 (2017)
 
