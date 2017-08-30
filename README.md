@@ -60,6 +60,14 @@ ERM
  ├── output                # ERM output and extended roofline plots
  ├── run-erm.py            # Python script to run ERM.
 
+    .
+    ├── build                   # Compiled files (alternatively `dist`)
+    ├── docs                    # Documentation files (alternatively `doc`)
+    ├── src                     # Source files (alternatively `lib` or `app`)
+    ├── test                    # Automated tests (alternatively `spec` or `tests`)
+    ├── tools                   # Tools and utilities
+    ├── LICENSE
+    └── README.md
 
 
 1. Prepare and locate your source file (C or C++) into the src directory.  
