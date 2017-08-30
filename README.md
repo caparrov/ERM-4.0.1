@@ -28,9 +28,8 @@ To generate the extended roofline plot, ERM uses the python plotting library Mat
 
 ### Install LLVM
 
-This repository contains the entire source code of LLVM (llvm.4.0.1.src), with additional files in llvm.4.0.1.src/lib/Support
-that implement the DAG analysis, and some modifications in the interpreter
-(llvm.4.0.1.src/lib/Execution/Interpreter/Execution.cpp). To install LLVM,
+This repository contains the entire source code of LLVM (llvm.4.0.1.src), with additional files in llvm.4.0.1.src/lib/Support and llvm.4.0.1.src/include/llvm/Support that implement the DAG analysis, and some modifications in the interpreter
+(llvm.4.0.1.src/lib/Execution/Interpreter/Execution.cpp). The original lib/Support/CMakeLists.txt is also modified to add the new files. To install LLVM,
 
 1. Create an empty build directory:
 
@@ -45,20 +44,28 @@ cd llvm.4.0.1.build
 CC=gcc CXX=g++ cmake -DCMAKE_INSTALL_PREFIX=/path/to/install -DLLVM_ENABLE_FFI=ON -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_ENABLE_CXX1Y=ON -DLLVM_BINUTILS_INCDIR=path/to/binutils/include -DCMAKE_BUILD_TYPE=RelWithDebInfo -Wno-dev ../llvm-4.0.1.src
 ```
 
-3. Add DynamicAnalysis.cpp to llvm-4.0.1.src/lib/Support/CMakeLists.txt
-
-4. Finally, make and install. It takes time, so be patient :)
+3. Finally, make and install. It takes time, so be patient :)
 
 ```
 make && make install
 ```
 
-## Running an application
+## Analyzing an application
+
+ERM assumes the following directory layout:
+
+ERM
+ ├── src                   # Cource code of the numerical kernels (.cpp, .c. .h, etc.)
+ ├── bin                   # LLVM bitcode files
+ ├── output                # ERM output and extended roofline plots
+ ├── run-erm.py            # Python script to run ERM.
+
+
 
 1. Prepare and locate your source file (C or C++) into the src directory.  
 
 * By default, ERM analyzes the entire main function, but it is recommeded to specify the function to be analyzed. 
-To make sure the function is not inline (otherwise, ERM cannot detect the function call to trigger the analysis), prepend `static __attribute__((noinline)`) to the function signature. 
+To make sure the function is not inlined (otherwise ERM cannot detect the function call to trigger the analysis), prepend `static __attribute__((noinline)`) to the function signature. 
 
 * If you want to analyze the executio of the kernel in a warm cache scenario, make sure the function is called twice:
 
@@ -69,13 +76,13 @@ for (unsigned i = 0; i< 2; i++)
 
 * If multiple files, 
 
-2. Setup configuration variables in the script run-erm.py
+2. Configure the analysis with the following configuration variables in the script run-erm.py
  
 * benchmark: name of the source code file without the extension.
 * function: name of the function to be analyzed. 
 * input: arguments for the execution of the input file, if any.
 * double_precision: 1 if double-precision flaoting point, 0 is single-precision floating point.
-* config: the parameters that define the model of the microarchitecture can be specified via command line to the interpreter (type 'lli --help' to see all command line options) or via a JSON file located in the configs directory. This option is preferred since the post-analysis to generate the extended roofline plot requires access to the microrachitectural parameters. All configurations files must have the format `configX.json`, where X is an ID for the configuration. For example, `configSB.json` containts the parameters that define a SB microarchiecture. The variable config in the run-erm.py script must be initialized with the config ID (X).
+* config: the parameters that define the model of the microarchitecture can be specified via command line to the interpreter (type 'lli --help' to see all command line options) or via a JSON file located in the configs directory. This option is preferred since the post-analysis to generate the extended roofline plot requires access to the microrachitectural parameters. All configurations files must have the format `configX.json`, where X is an ID for the configuration. For example, `configSB.json` contains the parameters that define a SB microarchiecture. The variable config in the run-erm.py script must be initialized with the config ID (X).
 
 * Initilize LLI_PATH and CLANG_PATH to the location where they are installed (prefix specificied in the LLVM installation).
 
