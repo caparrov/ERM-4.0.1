@@ -83,7 +83,7 @@ The parameters that define the model of the microarchitecture can be specified v
 
 
 </sub>Command-line argument | Description</sub>
-:----------- | :-----
+:------------------------- | :-----
   -address-generation-units=<uint>  |     Specify the number of address generation units. Default value is infinity
   -cache-line-size=<uint>           |     Specify the cache line size (B). Default value is 64 B
   -debug                             |    Generate debug information to allow debugging IR.
