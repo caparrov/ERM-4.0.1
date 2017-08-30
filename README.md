@@ -81,6 +81,7 @@ for (unsigned i = 0; i< 2; i++)
 
 The parameters that define the model of the microarchitecture can be specified via command line to the interpreter (type 'lli --help' to see all command line options) or via a JSON file located in the configs directory. This option is preferred since the post-analysis to generate the extended roofline plot requires access to the microrachitectural parameters. All configurations files must have the format `configX.json`, where X is an ID for the configuration. For example, `configSB.json` contains the parameters that define a SB microarchiecture.
 
+<sub>
 Command-line argument | Description
 :----------- | :-----
   -address-generation-units=<uint>  |     Specify the number of address generation units. Default value is infinity
@@ -103,7 +104,7 @@ Command-line argument | Description
   -reorder-buffer-size=<uint>           | Specify the size of the reorder buffer. Default value is infinity
   -reservation-station-size=<uint>      | Specify the size of a centralized reservation station. Default value is infinity  
   -store-buffer-size=<uint>            |  Specify the size of the store buffer. Default value is infinity
-
+</sub>
 
 
 3. Configure the analysis with the following configuration variables in the script run-erm.py
