@@ -1,6 +1,6 @@
 # DAG-based Performance Model
 
-![alt text](https://raw.githubusercontent.com/caparrov/ERM/blob/master/resources/perf-model-overview.png "")
+![alt text](https://raw.githubusercontent.com/caparrov/ERM-4.0.1/master/resources/perf-model-overview.png "")
 
 
 
