@@ -6,9 +6,6 @@ ERM is based on the the DAG-based performance model from [1]. Given a numerical 
 
 
 
-![Alt text](resources/images/perf-model-overview.gif?raw=true "Optional Title")
-
-
 
 
 ## Resources
