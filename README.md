@@ -10,7 +10,7 @@ ERM is based on the the DAG-based performance model from [1]. Given a numerical 
 
 ## Resources
 
-* [DAG-Based Performance model](https://github.com/caparrov/ERM/blob/master/resources/performance-model.md)
+* [DAG-Based Performance model](https://github.com/caparrov/ERM-4.0.1/blob/master/resources/performance-model.md)
 * [Execution flow in ERM](https://github.com/caparrov/ERM/blob/master/resources/execution-flow.md)
 * [Limitations](https://github.com/caparrov/ERM/resources/limitations.md)
 * [Comparison to measured performance](https://github.com/caparrov/ERM/resources/comparison.md)
