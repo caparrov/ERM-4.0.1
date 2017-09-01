@@ -46,7 +46,10 @@ ERM is based on a novel DAG-based performance model that extendsclassical analy
 
 ## Properties of the scheduled DAG
 
-![alt text](https://raw.githubusercontent.com/caparrov/ERM-4.0.1/master/resources/images/livermore-kernel-23.png "")
+![alt text](https://raw.githubusercontent.com/caparrov/ERM-4.0.1/master/resources/images/livermore-kernel-23.png width="48")
+<!---
+<a href="url"><img src="http://url.to/image.png" align="left" height="48" width="48" ></a>
+-->
 
 ![alt text](https://raw.githubusercontent.com/caparrov/ERM-4.0.1/master/resources/images/scheduled-DAG.png "")
 
